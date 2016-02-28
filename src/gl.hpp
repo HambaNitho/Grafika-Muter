@@ -6,5 +6,6 @@
 #include "line.hpp"
 #include "polygon.hpp"
 #include "point.hpp"
+#include "cube.hpp"
 
 #endif

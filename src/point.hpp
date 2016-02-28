@@ -24,9 +24,9 @@ public:
 	static bool cmp_z(const point& p1, const point& p2);
 
 	// Transformasi
-	point move(int delta_x = 0, int delta_y = 0, int delta_x = 0);
-	point scale(float scale, int x_origin, int y_origin, int z_origin);
-	point rotate(float angle, int x_origin, int y_origin, int z_origin);
+	point move(int delta_x = 0, int delta_y = 0, int delta_z = 0);
+	point scale(float scale, int x_origin, int y_origin, int z_origin = 0);
+	point rotate(float angle, int x_origin, int y_origin, int z_origin = 0);
 
 private:
 	int x;
