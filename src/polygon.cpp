@@ -70,7 +70,7 @@ void polygon::draw_fill(int x, int y, uint32_t color) {
 
 	for (int i = topY; i <= bottomY; i++) {
 		
-		printf("%d\n", i);
+		// printf("%d\n", i);
 		
 		std::vector<point> intersect;
 		for (int j = 0; j < points.size(); j++) {
