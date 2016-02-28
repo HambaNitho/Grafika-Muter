@@ -1,6 +1,9 @@
 #ifndef _POIN_H
 #define _POIN_H
 
+#include <cmath>
+#include <vector>
+#include "multiplication.hpp"
 
 class point {
 public:
@@ -27,6 +30,9 @@ public:
 	point move(int delta_x = 0, int delta_y = 0, int delta_z = 0);
 	point scale(float scale, int x_origin, int y_origin, int z_origin = 0);
 	point rotate(float angle, int x_origin, int y_origin, int z_origin = 0);
+
+	// Prespective Projection
+	point camera_tranform(point camera_position, point orientation);
 
 private:
 	int x;
