@@ -86,7 +86,7 @@ void polygon::draw_fill(int x, int y, uint32_t color) {
 			int xmax = std::max(points[j].get_x(), points[(j+1) % points.size()].get_x());
 			int xmin = std::min(points[j].get_x(), points[(j+1) % points.size()].get_x());
 
-			if (i >= ymin && i <= ymax) {
+			if (i >= ymin && i <= ymax){// && i != points[j].get_y()) {
 				float deltaX = points[j].get_x() - points[(j+1)%points.size()].get_x();
 				float deltaY = points[j].get_y() - points[(j+1)%points.size()].get_y();
 				float gradien = 0;
@@ -120,12 +120,72 @@ void polygon::draw_fill(int x, int y, uint32_t color) {
 		}
 
 		sort(intersect.begin(), intersect.end(), point::cmp_x);
-
-		// printf("draw from %d, %d to %d, %d\n", intersect[0].get_x(), intersect[0].get_y(), intersect[1].get_x(), intersect[1].get_y());
-
-		line l(intersect[0], intersect[1]);
+		if (intersect[0].get_y() != intersect[1].get_y())
+		printf("draw from %d, %d to %d, %d at i = %d\n", intersect[0].get_x(), intersect[0].get_y(), intersect[1].get_x(), intersect[1].get_y(), i);
+		int k = 1;
+		if (intersect[0].get_x() == intersect[1].get_x() && intersect.size() > 2)
+			k++;
+		line l(intersect[0], intersect[k]);
 		l.draw(color);
 	}
+}
+
+std::vector<int> polygon::scanline(int y) {
+	
+	int i = y;
+	std::vector<int> intersect;
+	for (int j = 0; j < points.size(); j++) {
+		// Cek perpotongan
+
+		// printf("%d, %d",points[j].get_x(), points[j].get_y());
+		// printf(" %d, %d\n",points[(j + 1) % points.size()].get_x(), points[(j + 1) % points.size()].get_y());
+
+
+		int ymax = std::max(points[j].get_y(), points[(j+1) % points.size()].get_y());
+		int ymin = std::min(points[j].get_y(), points[(j+1) % points.size()].get_y());
+
+		int xmax = std::max(points[j].get_x(), points[(j+1) % points.size()].get_x());
+		int xmin = std::min(points[j].get_x(), points[(j+1) % points.size()].get_x());
+
+		if (i >= ymin && i <= ymax){// && i != points[j].get_y()) {
+			float deltaX = points[j].get_x() - points[(j+1)%points.size()].get_x();
+			float deltaY = points[j].get_y() - points[(j+1)%points.size()].get_y();
+			float gradien = 0;
+			
+			if (deltaX != 0 && deltaY != 0) {
+				gradien = deltaX/deltaY;	
+			}
+
+
+			int intersect_y = i;
+			int intersect_x;
+
+
+			if (deltaX == 0) {
+				intersect_x = xmin;
+			} else {
+				if (gradien < 0) {
+					intersect_x = ((ymax - i) * (xmax - xmin) / (ymax - ymin)) + xmin;
+				} else if (gradien > 0) {
+					intersect_x = ((i - ymin) * (xmax - xmin) / (ymax - ymin)) + xmin;
+				}
+			}
+
+			// printf("berpotongan di %d, %d\n", intersect_x, intersect_y);
+			intersect.push_back(intersect_x);
+
+		} else {
+			// printf("tidak berpotongan\n");
+		}
+	}
+
+	sort(intersect.begin(), intersect.end());
+	
+	int k = 1;
+	if (intersect[0] == intersect[1] && intersect.size() > 2)
+		k++;
+	intersect[1] = intersect[k];
+	return intersect;
 }
 
 void polygon::scale(float scale) {

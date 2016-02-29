@@ -8,5 +8,7 @@
 #include "polygon.hpp"
 #include "point.hpp"
 #include "cube.hpp"
+#include "fill.hpp"
+#include <list>
 
 #endif

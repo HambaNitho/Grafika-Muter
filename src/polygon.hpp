@@ -19,7 +19,7 @@ public:
 
 	void draw_stroke(int x = 0, int y = 0, uint32_t color = 0xffffffff);
 	void draw_fill(int x, int y, uint32_t color = 0xffffffff);
-
+	std::vector<int> scanline(int y);
 	// Transformation
 	void scale(float scale);
 	void rotate(float rotate);

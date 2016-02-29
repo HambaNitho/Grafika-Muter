@@ -1,15 +1,15 @@
 #include "gl.hpp"
 #include <math.h>
-#include <ncurses.h>
+/*#include <ncurses.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-
+*/
 int main () {
 
-  point camera_pos(300,300,-100);
+  point camera_pos(200,300,-100);
   double o_x = -0.1;
   double o_y = -0.5;
   double o_z = 0;
@@ -24,6 +24,11 @@ int main () {
   while (i < 15) {
     o_y += i*0.01;
       
+    std::list<polygon> polygons;
+
+    std::list<uint32_t> colors;
+
+
     line line_1(a.camera_tranform(camera_pos, o_x, o_y, o_z),
                 b.camera_tranform(camera_pos, o_x, o_y, o_z));
     line line_2(b.camera_tranform(camera_pos, o_x, o_y, o_z),
@@ -107,22 +112,26 @@ int main () {
 
 
     if (o_y < 0) {
-      drawer::get_instance()->add_polygon(pkiri, 0xff383838);
-      drawer::get_instance()->add_polygon(patas, 0xff989898);
-      drawer::get_instance()->add_polygon(pdepan, 0xff4D4D4D);
-      drawer::get_instance()->add_polygon(pkanan, 0xffFFFFFF);
+      polygons.push_back(pkanan); colors.push_back(0xffFFFFFF);
+      polygons.push_back(pdepan); colors.push_back(0xff4D4D4D);
+      //polygons.push_back(patas); colors.push_back(0xff989898);
+      polygons.push_back(pkiri); colors.push_back(0xff383838);
     } else {
-      drawer::get_instance()->add_polygon(pkanan, 0xffFFFFFF);
-      drawer::get_instance()->add_polygon(patas, 0xff989898);
-      drawer::get_instance()->add_polygon(pdepan, 0xff4D4D4D);
-      drawer::get_instance()->add_polygon(pkiri, 0xff383838);
+      polygons.push_back(pkiri); colors.push_back(0xff383838);
+      polygons.push_back(pdepan); colors.push_back(0xff4D4D4D);
+      //polygons.push_back(patas); colors.push_back(0xff989898);
+      polygons.push_back(pkanan); colors.push_back(0xffFFFFFF);
     }
     
 
     usleep(100000);
-    drawer::get_instance()->draw();
+    //drawer::get_instance()->draw();
+    fillo fl(polygons, colors);
+    fl.fill_polygons();
     canvas::get_instance()->render();
     canvas::get_instance()->clear();
+    polygons.clear();
+    colors.clear();
     i++;
   }
 

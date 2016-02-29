@@ -7,6 +7,7 @@ drawer::drawer() {}
 void drawer::draw() {
 	for (int x = 0 ; x < polygons.size(); x++) {
 		polygons[x].draw_fill(0 , 0, colors[x]);
+		polygons[x].draw_stroke(0 , 0, colors[x]);
 	}
 }
 
