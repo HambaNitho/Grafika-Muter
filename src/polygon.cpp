@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 #include "line.hpp"
 #include <iostream>
+#include <algorithm>
 
 polygon::polygon() {
 	this->scale_factor = 1;
@@ -53,15 +54,77 @@ void polygon::resize(int n_points) {
 }
 
 void polygon::draw_fill(int x, int y, uint32_t color) {
-	if (((x > 0) && (x < (int) canvas::get_instance()->get_var_info().xres)) ||
-      ((y > 0) && (y < (int) canvas::get_instance()->get_var_info().yres))) {
-		if (canvas::get_instance()->get_color(x, y) != color) {
-			canvas::get_instance()->draw_pixel(x, y, color);
-			draw_fill(x+1, y, color);
-			draw_fill(x-1, y, color);
-			draw_fill(x, y+1, color);
-			draw_fill(x, y-1, color);
+	// Cari titik paling kiri
+	std::vector<point> sorted_x_pts = points;
+	sort(sorted_x_pts.begin(), sorted_x_pts.end(), point::cmp_x);
+
+	std::vector<point> sorted_y_pts = points;
+	sort(sorted_y_pts.begin(), sorted_y_pts.end(), point::cmp_y);
+
+	int leftX = sorted_x_pts[0].get_x();
+	int rightX = sorted_x_pts[sorted_x_pts.size() - 1].get_x();
+
+	int topY = sorted_y_pts[0].get_y();
+	int bottomY = sorted_y_pts[sorted_y_pts.size() - 1].get_y();
+
+
+	for (int i = topY; i <= bottomY; i++) {
+		
+		// printf("%d\n", i);
+		
+		std::vector<point> intersect;
+		for (int j = 0; j < points.size(); j++) {
+			// Cek perpotongan
+
+			// printf("%d, %d",points[j].get_x(), points[j].get_y());
+			// printf(" %d, %d\n",points[(j + 1) % points.size()].get_x(), points[(j + 1) % points.size()].get_y());
+
+
+			int ymax = std::max(points[j].get_y(), points[(j+1) % points.size()].get_y());
+			int ymin = std::min(points[j].get_y(), points[(j+1) % points.size()].get_y());
+
+			int xmax = std::max(points[j].get_x(), points[(j+1) % points.size()].get_x());
+			int xmin = std::min(points[j].get_x(), points[(j+1) % points.size()].get_x());
+
+			if (i >= ymin && i <= ymax) {
+				float deltaX = points[j].get_x() - points[(j+1)%points.size()].get_x();
+				float deltaY = points[j].get_y() - points[(j+1)%points.size()].get_y();
+				float gradien = 0;
+				
+				if (deltaX != 0 && deltaY != 0) {
+					gradien = deltaX/deltaY;	
+				}
+
+
+				int intersect_y = i;
+				int intersect_x;
+
+
+				if (deltaX == 0) {
+					intersect_x = xmin;
+				} else {
+					if (gradien < 0) {
+						intersect_x = ((ymax - i) * (xmax - xmin) / (ymax - ymin)) + xmin;
+					} else if (gradien > 0) {
+						intersect_x = ((i - ymin) * (xmax - xmin) / (ymax - ymin)) + xmin;
+					}
+				}
+
+				// printf("berpotongan di %d, %d\n", intersect_x, intersect_y);
+				point p(intersect_x, intersect_y);
+				intersect.push_back(p);
+
+			} else {
+				// printf("tidak berpotongan\n");
+			}
 		}
+
+		sort(intersect.begin(), intersect.end(), point::cmp_x);
+
+		// printf("draw from %d, %d to %d, %d\n", intersect[0].get_x(), intersect[0].get_y(), intersect[1].get_x(), intersect[1].get_y());
+
+		line l(intersect[0], intersect[1]);
+		l.draw(color);
 	}
 }
 

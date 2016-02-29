@@ -4,29 +4,24 @@
 using namespace std;
 
 int main() {
-  point px(10,10);
-  cube cx(px, 8);
-  cout << cx.get_side(1).get_points()[1].get_x() << endl;
-  cout << cx.get_side(1).get_points()[1].get_y();
-
-  //canvas::get_instance()->render();
-  //usleep(100000);
-/*  polygon p;
-  p.scale(4);
+  polygon p;
   p.add_point(0, 0);
-  p.add_point(100, 0);
-  p.add_point(100, 100);
-  p.add_point(0, 100);
-  p.draw_stroke(500, 500);
-*/
-/*  for (int i = 0; i < 1000; i++) {
-    p.rotate(i*0.05);
-    p.scale(i*0.05);
-    p.draw_stroke(500, 500);
-    canvas::get_instance()->render();
-    canvas::get_instance()->clear();  
-    usleep(100000);
-  }*/
+  p.add_point(50, 20);
+  p.add_point(50, 30);
+  p.add_point(0, 50);
 
+
+  polygon p2;
+  p2.add_point(30, 0);
+  p2.add_point(50, 50);
+  p2.add_point(30, 70);
+  p2.add_point(0, 50);
+
+
+  drawer::get_instance()->add_polygon(p, 0xffff0000);
+  drawer::get_instance()->add_polygon(p2, 0xffff00ff);
+  drawer::get_instance()->draw();
+
+  canvas::get_instance()->render();
   return 0;
 }
