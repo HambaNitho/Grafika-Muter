@@ -117,34 +117,34 @@ bool point::cmp_z(const point& p1, const point& p2) {
  * Prespective Projection
  *
  */
-point point::camera_tranform(point camera_position, point orientation) {
+point point::camera_tranform(point camera_position, double o_x, double o_y, double o_z) {
 
 	std::vector<std::vector<double> > M1(3, std::vector<double>(3));
 	M1[0][0] = 1;
 	M1[0][1] = 0;
 	M1[0][2] = 0;
 	M1[1][0] = 0;
-	M1[1][1] = cos((double) -orientation.get_x());
-	M1[1][2] = -sin((double) -orientation.get_x());
+	M1[1][1] = cos(-o_x);
+	M1[1][2] = -sin(-o_x);
 	M1[2][0] = 0;
-	M1[2][1] = sin((double) -orientation.get_x());
-	M1[2][2] = cos((double) -orientation.get_x());
+	M1[2][1] = sin(-o_x);
+	M1[2][2] = cos(-o_x);
 	std::vector<std::vector<double> > M2(3, std::vector<double>(3));
-	M2[0][0] = cos((double) -orientation.get_y());
+	M2[0][0] = cos(-o_y);
 	M2[0][1] = 0;
-	M2[0][2] = sin((double) -orientation.get_y());
+	M2[0][2] = sin(-o_y);
 	M2[1][0] = 0;
 	M2[1][1] = 1;
 	M2[1][2] = 0;
-	M2[2][0] = -sin((double) -orientation.get_y());
+	M2[2][0] = -sin(-o_y);
 	M2[2][1] = 0;
-	M2[2][2] = cos((double) -orientation.get_y());
+	M2[2][2] = cos(-o_y);
 	std::vector<std::vector<double> > M3(3, std::vector<double>(3));
-	M3[0][0] = cos((double) -orientation.get_z());
-	M3[0][1] = -sin((double) -orientation.get_z());
+	M3[0][0] = cos(-o_z);
+	M3[0][1] = -sin(-o_z);
 	M3[0][2] = 0;
-	M3[1][0] = sin((double) -orientation.get_z());
-	M3[1][1] = cos((double) -orientation.get_z());
+	M3[1][0] = sin(-o_z);
+	M3[1][1] = cos(-o_z);
 	M3[1][2] = 0;
 	M3[2][0] = 0;
 	M3[2][1] = 0;
@@ -159,9 +159,9 @@ point point::camera_tranform(point camera_position, point orientation) {
 	temp = multiplication::result(multiplication::result(multiplication::result(M1,M2), M3), input);
 
 	point to_return;
-	to_return.set_x((int) temp[1][0]);
-	to_return.set_y((int) temp[2][0]);
-	to_return.set_z((int) temp[3][0]);
+	to_return.set_x((int) temp[0][0]);
+	to_return.set_y((int) temp[1][0]);
+	to_return.set_z((int) temp[2][0]);
 
 	return to_return;
 
