@@ -23,5 +23,6 @@ int main() {
   drawer::get_instance()->draw();
 
   canvas::get_instance()->render();
+  canvas::get_instance()->clear();
   return 0;
 }
