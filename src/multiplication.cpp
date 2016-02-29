@@ -1,8 +1,8 @@
 #include "multiplication.hpp"
 #include <cstdlib>
 
-std::vector<std::vector<int> > multiplication::result(const std::vector<std::vector<int> >& A,
-                                                      const std::vector<std::vector<int> >& B) {
+std::vector<std::vector<double> > multiplication::result(const std::vector<std::vector<double> >& A,
+                                                      const std::vector<std::vector<double> >& B) {
 
   int row_A = A.size();
   int col_A = A[0].size();
@@ -11,7 +11,7 @@ std::vector<std::vector<int> > multiplication::result(const std::vector<std::vec
   }
   int col_B = B[0].size();
 
-  std::vector<std::vector<int> > to_return;
+  std::vector<std::vector<double> > to_return;
   to_return.resize(row_A);
   for (int i = 0; i < row_A; i++) {
     to_return[i].resize(col_B);
