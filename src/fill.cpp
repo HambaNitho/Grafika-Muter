@@ -14,12 +14,16 @@ void fillo::fill_polygons() {
 	// screen resolution
 	int v_res = canvas::get_instance()->get_var_info().yres;
 	int h_res = canvas::get_instance()->get_var_info().xres;
+
 	for (int y = 0; y < v_res; y++) {
+		//printf("y = %d\n",y);
 		i = polygons.begin(); color = colors.begin();
+		int j=0;
 		free_space.push_back(point(0,h_res));
 		while ( (i != polygons.end()) && (!free_space.empty()) ) { // allocate colors of every visible polygons
+			//printf("i = %d\n",j);
 			allocate_polygon(*i, *color, y);
-			i++; color++;
+			i++; color++; j++;
 		}
 		free_space.clear();
 	}
@@ -56,45 +60,58 @@ void fillo::allocate_color(int x1, int x2, int y, uint32_t color) {
 	list<point>::iterator i = free_space.begin(), i2;
 	int temp;
 	while ( (i != free_space.end()) && (!free_space.empty()) ) {
-		if (x1 >= i->get_y()) { // case current free space not sufficient
+		//printf("wow ");
+		if (x1 > i->get_y()) { // case current free space not sufficient
+			//printf("1 ");
 			i++;
 		} else if (x1 < i->get_x()) { // 
+			//printf("b ");
 			if (x2 < i->get_x()){
+				//printf("2 ");
 				break;
 			}
 			else {
+				//printf("3 ");
 				x1 = i->get_x();
 			}
 		} else {
+			//printf("c ");
 			if (x2 > i->get_y()) {
-				/////////////////////////draw_line(x1, i->get_y());
+				//printf("4 ");
 				point p1(x1,y); point p2(i->get_y(),y);
 				line l(p1,p2);
+				l.draw(color);
 				temp = x1;
-				x1 = i->get_y();
-				i->set_y(x1);
-				i++;
+				x1 = i->get_y()+1;
+				i->set_y(temp-1);
 			} else {
-				/////////////////////////draw_line(x1, x2);
 				point p1(x1,y); point p2(x2,y);
 				line l(p1,p2);
 				l.draw(color);
 				if (x1 == i->get_x()) {
-					i->set_x(x2);
+					//printf("5 ");
+					i->set_x(x2+1);
 				} else {
+					//printf("6 ");
 					i2 = i;
 					i2++;
-					point p(x2,i->get_y());
+					point p(x2+1,i->get_y());
 					free_space.insert(i2, p);
-					i->set_y(x1);
+					i->set_y(x1-1);
 				}
 			}
-			if (i->get_x() == i->get_y()){
-				free_space.erase(i);
+			if (i->get_x() > i->get_y()){
+				//printf("(%d,%d)", i->get_x(),i->get_y());
+				i = free_space.erase(i);
+				//printf("clear ");
+				//printf("(%d,%d)", i->get_x(),i->get_y());
 			}
 			else {
+				//printf("no clear");
 				i++;
 			}
 		}
+		//printf("\n");
 	}
+	//printf("done!!\n");
 }

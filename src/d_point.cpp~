@@ -92,10 +92,10 @@ int main () {
     patas.add_point(f.camera_tranform(camera_pos, o_x, o_y, o_z));
     patas.add_point(b.camera_tranform(camera_pos, o_x, o_y, o_z));
 
-    //printf("%d\n",patas.get_points()[0].get_y());
-    //printf("%d\n",patas.get_points()[1].get_y());
-    //printf("%d\n",patas.get_points()[2].get_y());
-    //printf("%d\n",patas.get_points()[3].get_y());
+    printf("%d\n",patas.get_points()[0].get_y());
+    printf("%d\n",patas.get_points()[1].get_y());
+    printf("%d\n",patas.get_points()[2].get_y());
+    printf("%d\n",patas.get_points()[3].get_y());
 
     polygon pkanan;
     pkanan.add_point(b.camera_tranform(camera_pos, o_x, o_y, o_z));
@@ -116,7 +116,7 @@ int main () {
 
 
     if (o_y < 0) {
-      //printf("atas\n");
+      printf("atas\n");
       polygons.push_back(pkanan); colors.push_back(0xffFFFFFF);
       polygons.push_back(pdepan); colors.push_back(0xff4D4D4D);
       polygons.push_back(patas); colors.push_back(0xff989898);
